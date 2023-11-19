@@ -59,7 +59,9 @@ const ExpenseForm = ({ addExpense }: Props) => {
         >
           <option selected></option>
           {CATEGORIES.map((category) => (
-            <option value={category}>{category}</option>
+            <option key={category} value={category}>
+              {category}
+            </option>
           ))}
         </select>
         {errors && <p className="text-danger">{errors.category?.message}</p>}
