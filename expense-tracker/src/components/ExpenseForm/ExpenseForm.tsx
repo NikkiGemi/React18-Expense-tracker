@@ -1,10 +1,9 @@
-import { FieldValues, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import "./Form.css";
 
 interface Props {
-  onAdd: () => void;
+  addExpense: () => void;
 }
 
 const schema = z.object({
@@ -14,7 +13,7 @@ const schema = z.object({
 });
 type FormData = z.infer<typeof schema>;
 
-const ExpenseForm = ({ onAdd }: Props) => {
+const ExpenseForm = ({ addExpense }: Props) => {
   const {
     register,
     formState: { errors },
@@ -22,7 +21,7 @@ const ExpenseForm = ({ onAdd }: Props) => {
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   return (
-    <form className="expenseForm" onSubmit={handleSubmit(onAdd)}>
+    <form className="expenseForm" onSubmit={handleSubmit(addExpense)}>
       <div className="mb-3">
         <label htmlFor="description" className="form-label">
           Description
@@ -58,15 +57,17 @@ const ExpenseForm = ({ onAdd }: Props) => {
           className="form-select"
         >
           <option selected></option>
-          <option value="utilities">Utilities</option>
-          <option value="groceries">Groceries</option>
-          <option value="entertainment">Entertainment</option>
+          <option value="Utilities">Utilities</option>
+          <option value="Groceries">Groceries</option>
+          <option value="Entertainment">Entertainment</option>
         </select>
         {errors && <p className="text-danger">{errors.category?.message}</p>}
       </div>
-      <button type="submit" className="btn btn-primary">
-        Add expense
-      </button>
+      <div className="mb-3">
+        <button type="submit" className="btn btn-primary">
+          Add expense
+        </button>
+      </div>
     </form>
   );
 };

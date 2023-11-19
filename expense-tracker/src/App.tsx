@@ -1,47 +1,54 @@
 import { useState } from "react";
 import ExpenseForm from "./components/ExpenseForm";
 import ExpenseList from "./components/ExpenseList";
+import ExpenseFilter from "./components/ExpenseFilter";
 import { produce } from "immer";
 
 const App = () => {
-  const [listOfExpenses, setListOfExpenses] = useState([
+  const [expenses, setExpenses] = useState([
     {
       description: "Milk",
-      category: "groceries",
+      category: "Groceries",
       amount: 8,
     },
     {
       description: "Movie",
-      category: "entertainment",
+      category: "Entertainment",
       amount: 18,
     },
     {
       description: "Internet",
-      category: "utilities",
+      category: "Utilities",
       amount: 50,
     },
   ]);
-  const [total, setTotal] = useState(0);
-
-  const deleteExpense = (selectedIndex) => {
-    setListOfExpenses(
+  const deleteExpense = (selectedIndex: number) => {
+    setExpenses(
       produce((draft) => {
         return draft.filter((item, index) => selectedIndex !== index);
       })
     );
-    console.log(listOfExpenses);
+    console.log(expenses);
   };
 
   const addExpense = (data) => {
-    setListOfExpenses([...listOfExpenses, data]);
+    setExpenses([...expenses, data]);
   };
+
+  const [selectedCategory, setSelectedCategory] = useState("");
+
+  const visibleCategories =
+    selectedCategory === ""
+      ? expenses
+      : expenses.filter((expense) => expense.category === selectedCategory);
+
   return (
     <>
-      <ExpenseForm onAdd={addExpense} />
-      <ExpenseList
-        listOfExpenses={listOfExpenses}
-        onDeleteExpense={deleteExpense}
-      />
+      <ExpenseForm addExpense={addExpense} />
+      <ExpenseFilter
+        setCategory={(selected) => setSelectedCategory(selected)}
+      ></ExpenseFilter>
+      <ExpenseList expenses={visibleCategories} deleteExpense={deleteExpense} />
     </>
   );
 };

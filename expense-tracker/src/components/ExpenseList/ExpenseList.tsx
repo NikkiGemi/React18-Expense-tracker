@@ -1,69 +1,54 @@
-import { useState } from "react";
-import "./expenseList.css";
-
-interface Props {
-  listOfExpenses: string[];
-  onDeleteExpense: () => void;
+interface Expenses {
+  description: string;
+  amount: number;
+  category: string;
 }
 
-const ExpenseList = ({ listOfExpenses, onDeleteExpense }: Props) => {
-  const [selectedCategory, setSelectedCategory] = useState("all");
+interface Props {
+  expenses: Expenses[];
+  deleteExpense: (id: number) => void;
+}
 
-  let total = 0;
-
+const ExpenseList = ({ expenses, deleteExpense }: Props) => {
   return (
-    <div className="expenseList">
-      {listOfExpenses.length > 0 && (
-        <select
-          className="form-select filterDrop"
-          onChange={(event) => setSelectedCategory(event.target.value)}
-        >
-          <option value="all">All</option>
-          {listOfExpenses.map((expense) => (
-            <option value={expense.category}>{expense.category}</option>
-          ))}
-        </select>
-      )}
-      <table className="table table-bordered">
-        <thead>
-          <tr>
-            <th scope="col">Description</th>
-            <th scope="col">Amount</th>
-            <th scope="col">category</th>
-            <th scope="col"></th>
+    <table className="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">Description</th>
+          <th scope="col">Amount</th>
+          <th scope="col">category</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {expenses.map((expense, index) => (
+          <tr key={index}>
+            <th scope="row">{expense.description}</th>
+            <td>{expense.amount}</td>
+            <td>{expense.category}</td>
+            <td>
+              <button
+                className="btn btn-outline-danger"
+                onClick={() => deleteExpense(index)}
+              >
+                Delete
+              </button>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          {listOfExpenses.map(
-            (expense, index) =>
-              (selectedCategory === "all" ||
-                selectedCategory === expense.category) &&
-              ((total = total + expense.amount),
-              (
-                <tr key={index}>
-                  <th scope="row">{expense.description}</th>
-                  <td>{expense.amount}</td>
-                  <td>{expense.category}</td>
-                  <td>
-                    <button
-                      className="btn btn-primary"
-                      onClick={() => onDeleteExpense(index)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))
-          )}
-          <tr>
-            <th colSpan={3} scope="row">
-              Total
-            </th>
-            <td colSpan={3}>{total}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+        ))}
+        <tr>
+          <th colSpan={3} scope="row">
+            Total
+          </th>
+          <td colSpan={3}>
+            $
+            {expenses.reduce((acc, expense) => {
+              return expense.amount + acc;
+            }, 0)}
+          </td>
+        </tr>
+      </tbody>
+    </table>
   );
 };
 
