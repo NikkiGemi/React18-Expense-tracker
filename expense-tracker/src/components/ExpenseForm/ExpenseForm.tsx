@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { CATEGORIES } from "../../App";
 
 interface Props {
   addExpense: () => void;
@@ -57,9 +58,9 @@ const ExpenseForm = ({ addExpense }: Props) => {
           className="form-select"
         >
           <option selected></option>
-          <option value="Utilities">Utilities</option>
-          <option value="Groceries">Groceries</option>
-          <option value="Entertainment">Entertainment</option>
+          {CATEGORIES.map((category) => (
+            <option value={category}>{category}</option>
+          ))}
         </select>
         {errors && <p className="text-danger">{errors.category?.message}</p>}
       </div>

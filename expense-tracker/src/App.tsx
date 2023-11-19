@@ -4,6 +4,8 @@ import ExpenseList from "./components/ExpenseList";
 import ExpenseFilter from "./components/ExpenseFilter";
 import { produce } from "immer";
 
+export const CATEGORIES = ["Groceries", "Entertainment", "Utilities"];
+
 const App = () => {
   const [expenses, setExpenses] = useState([
     {
